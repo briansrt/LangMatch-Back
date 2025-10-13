@@ -1,0 +1,23 @@
+{
+  "name": "langmatch-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agent-runtime": "^3.908.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "moment-timezone": "^0.6.0",
+    "mongodb": "^6.20.0",
+    "pdfkit": "^0.17.2"
+  }
+}
