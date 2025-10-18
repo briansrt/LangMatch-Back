@@ -200,6 +200,42 @@ export const obtenerMetricasGlobales = async (req, res) => {
   }
 };
 
+export const obtenerSesionesActivas = async (req, res) => {
+  const client = await getClient();
+  const db = client.db("LangMatch");
+
+  try {
+    const sesiones = await db.collection("session")
+      .find({ endedAt: null })
+      .toArray();
+
+    // Si quieres mostrar el nombre del usuario también:
+    const usuarios = await db.collection("users").find().toArray();
+    const usuariosMap = Object.fromEntries(usuarios.map(u => [u.userId, u]));
+
+    const sesionesConUsuario = sesiones.map(s => ({
+      sessionId: s._id,
+      userId: s.userId,
+      usuario: usuariosMap[s.userId]
+        ? `${usuariosMap[s.userId].firstName} ${usuariosMap[s.userId].lastName}`
+        : "Desconocido",
+      language: s.language,
+      level: s.level,
+      startedAt: s.startedAt
+    }));
+
+    res.json({
+      total: sesionesConUsuario.length,
+      sesiones: sesionesConUsuario
+    });
+
+  } catch (error) {
+    console.error("❌ Error al obtener sesiones activas:", error);
+    res.status(500).json({ status: "Error", message: "Error interno del servidor" });
+  }
+};
+
+
 export const finalizarSesion = async (req, res) => {
   const client = await getClient();
   const db = client.db("LangMatch");

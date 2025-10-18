@@ -107,3 +107,20 @@ export const obtenerMetricasUsuario = async (req, res) => {
     res.status(500).json({ status: "Error", message: "Error interno del servidor" });
   }
 };
+
+export const obtenerListaUsuarios = async (req, res) => {
+  const client = await getClient();
+  const db = client.db("LangMatch");
+
+  try {
+    const usuarios = await db.collection("users")
+      .find({}, { projection: { _id: 0, userId: 1, firstName: 1, lastName: 1, email: 1, createdAt: 1 } })
+      .toArray();
+
+    res.json({ total: usuarios.length, usuarios });
+  } catch (error) {
+    console.error("❌ Error al obtener lista de usuarios:", error);
+    res.status(500).json({ status: "Error", message: "Error interno del servidor" });
+  }
+};
+
