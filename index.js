@@ -12,27 +12,9 @@ const app = express();
 app.use(urlencoded({extended: true}))
 app.use(json())
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.FRONTEND_URL_2,
-  process.env.FRONTEND_URL_3,
-  process.env.FRONTEND_URL_4,
-  undefined 
-];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Permitir solicitudes sin origin (por ejemplo, curl o mobile apps)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log("❌ Bloqueado por CORS:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+app.use(cors());
+
 
 app.use('/user', userRoutes);
 app.use('/sala', salaRoutes);
