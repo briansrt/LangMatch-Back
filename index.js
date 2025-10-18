@@ -22,16 +22,15 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     // Permitir solicitudes sin origin (por ejemplo, curl o mobile apps)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.log("❌ Bloqueado por CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
 
 app.use('/user', userRoutes);
