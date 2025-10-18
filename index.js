@@ -12,7 +12,28 @@ const app = express();
 app.use(urlencoded({extended: true}))
 app.use(json())
 
-app.use(cors())
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL_2,
+  process.env.FRONTEND_URL_3,
+  process.env.FRONTEND_URL_4
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origin (por ejemplo, curl o mobile apps)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
 app.use('/user', userRoutes);
 app.use('/sala', salaRoutes);
 
