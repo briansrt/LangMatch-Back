@@ -17,7 +17,7 @@ app.use('/user', userRoutes);
 app.use('/sala', salaRoutes);
 
 app.get('/', (req, res) => {
-    res.send('¡Hola, mundo!');
+    res.send('¡Hola, mundo! y !Hola LangMatch¡');
 });
 
 app.listen(port, ()=>{
