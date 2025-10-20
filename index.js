@@ -20,8 +20,8 @@ app.use(cors({
 }));
 
 
-app.use('/user', userRoutes);
-app.use('/sala', salaRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/sala', salaRoutes);
 
 app.get('/', (req, res) => {
     res.send('¡Hola, mundo! y !Hola LangMatch¡');
