@@ -13,7 +13,11 @@ app.use(urlencoded({extended: true}))
 app.use(json())
 
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://d1yw6dixmekuzw.cloudfront.net',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
 
 
 app.use('/user', userRoutes);
@@ -23,6 +27,6 @@ app.get('/', (req, res) => {
     res.send('¡Hola, mundo! y !Hola LangMatch¡');
 });
 
-app.listen(port, ()=>{
-    console.log(`listening at port http://localhost:${port}`);
+app.listen(port, '0.0.0.0', ()=>{
+    console.log(`listening at port http://0.0.0.0:${port}`);
 })
