@@ -1,13 +1,12 @@
 import express, { urlencoded, json } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import swaggerUi from "swagger-ui-express";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const swaggerFile = require("./swagger-output.json");
+import path from "path";
+import { fileURLToPath } from "url";
 import userRoutes from './routes/userRoutes.routes.js';
 import salaRoutes from './routes/salaRoutes.routes.js';
 dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const port = process.env.PORT;
 
@@ -19,7 +18,8 @@ app.use(json())
 
 app.use(cors());
 
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use('/swagger-output.json', express.static(path.join(__dirname, 'swagger-output.json')));
+app.use('/api-docs', express.static(path.join(__dirname, 'public/swagger')));
 app.use('/api/user', userRoutes);
 app.use('/api/sala', salaRoutes);
 
