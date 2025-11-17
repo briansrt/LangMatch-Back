@@ -1,0 +1,590 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API LangMatch",
+    "description": "Documentación de la API para la gestión de idiomas y traducciones.",
+    "version": "1.0.0"
+  },
+  "host": "lang-match-back.vercel.app",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user/crearUser": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Registra un nuevo usuario cuando el evento Clerk user.created llega al backend.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Evento enviado por Clerk u otro servicio de autenticación.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "user.created"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "usr_123456"
+                    },
+                    "first_name": {
+                      "type": "string",
+                      "example": "Carlos"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Pérez"
+                    },
+                    "email_addresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "email_address": {
+                            "type": "string",
+                            "example": "carlos@mail.com"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario registrado correctamente.",
+            "schema": {
+              "type": "string",
+              "example": "ok",
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/user/stats/{userId}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Devuelve métricas completas de un usuario específico.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Métricas del usuario",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "usr_12345"
+                },
+                "totalMensajesUsuario": {
+                  "type": "number",
+                  "example": 50
+                },
+                "totalMensajesBot": {
+                  "type": "number",
+                  "example": 50
+                },
+                "totalSesiones": {
+                  "type": "number",
+                  "example": 10
+                },
+                "duracionTotalMin": {
+                  "type": "string",
+                  "example": "120.50"
+                },
+                "promedioDuracionMin": {
+                  "type": "string",
+                  "example": "12.05"
+                },
+                "idiomas": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "idioma": {
+                        "type": "string",
+                        "example": "Spanish"
+                      },
+                      "sesiones": {
+                        "type": "number",
+                        "example": 5
+                      }
+                    }
+                  }
+                },
+                "niveles": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "nivel": {
+                        "type": "string",
+                        "example": "Beginner"
+                      },
+                      "sesiones": {
+                        "type": "number",
+                        "example": 6
+                      }
+                    }
+                  }
+                },
+                "promedioMensajesPorSesion": {
+                  "type": "string",
+                  "example": "10.00"
+                },
+                "ultimaSesion": {
+                  "type": "string",
+                  "example": "2025-01-15 12:00:00"
+                },
+                "actividad": {
+                  "type": "string",
+                  "example": "Activo"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/api/user/listaUsers": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Obtiene la lista completa de usuarios registrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number",
+                  "example": 2
+                },
+                "usuarios": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
+                        "type": "string",
+                        "example": "usr_456"
+                      },
+                      "firstName": {
+                        "type": "string",
+                        "example": "Ana"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "example": "García"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "ana@mail.com"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "example": "2025-01-05T12:00:00Z"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/api/sala/crearSala": {
+      "post": {
+        "tags": [
+          "Sala"
+        ],
+        "description": "Crea una nueva sala de conversación y envía el primer mensaje al agente.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "user_348EbmKDTOcpttgNGHPQDC8N6TZ"
+                },
+                "language": {
+                  "type": "string",
+                  "example": "English"
+                },
+                "level": {
+                  "type": "string",
+                  "example": "Beginner"
+                },
+                "nombre": {
+                  "type": "string",
+                  "example": "Jose"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sala creada correctamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Sala Creada"
+                },
+                "fecha": {
+                  "type": "string",
+                  "example": "2025-01-01 12:00:00"
+                },
+                "sessionId": {
+                  "type": "string",
+                  "example": "674ff0a20e8a"
+                },
+                "respuesta": {
+                  "type": "string",
+                  "example": "Hello! Nice to meet you..."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sala/mensaje": {
+      "post": {
+        "tags": [
+          "Sala"
+        ],
+        "description": "Envía un mensaje del usuario al agente y guarda la respuesta.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sessionId": {
+                  "type": "string",
+                  "example": "691b449f7542f251a8d9d6c6"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "user_348EbmKDTOcpttgNGHPQDC8N6TZ"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Hello, how are you?"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensaje procesado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Mensaje Enviado"
+                },
+                "fecha": {
+                  "type": "string",
+                  "example": "2025-01-01 12:00:00"
+                },
+                "respuesta": {
+                  "type": "string",
+                  "example": "I'm fine! How can I help you today?"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sala/finalizarSession": {
+      "post": {
+        "tags": [
+          "Sala"
+        ],
+        "description": "Finaliza una sesión y devuelve el PDF generado.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sessionId": {
+                  "type": "string",
+                  "example": "691b449f7542f251a8d9d6c6"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF generado y devuelto.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "PDF generado correctamente"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Sesión no encontrada"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sala/stats/global": {
+      "get": {
+        "tags": [
+          "Sala"
+        ],
+        "description": "Devuelve métricas globales de uso de la aplicación.",
+        "responses": {
+          "200": {
+            "description": "Métricas globales",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "totalMensajes": {
+                  "type": "number",
+                  "example": 200
+                },
+                "totalSesiones": {
+                  "type": "number",
+                  "example": 50
+                },
+                "idiomaMasPracticado": {
+                  "type": "string",
+                  "example": "English"
+                },
+                "nivelMasElegido": {
+                  "type": "string",
+                  "example": "A2"
+                },
+                "promedioDuracionMin": {
+                  "type": "string",
+                  "example": "10.5"
+                },
+                "promedioMensajesPorSesion": {
+                  "type": "string",
+                  "example": "16.8"
+                },
+                "totalUsuarios": {
+                  "type": "number",
+                  "example": 100
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sala/activas": {
+      "get": {
+        "tags": [
+          "Sala"
+        ],
+        "description": "Devuelve la lista de sesiones activas.",
+        "responses": {
+          "200": {
+            "description": "Sesiones activas",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number",
+                  "example": 1
+                },
+                "sesiones": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "example": "674ff0a20e8a"
+                      },
+                      "userId": {
+                        "type": "string",
+                        "example": "123"
+                      },
+                      "usuario": {
+                        "type": "string",
+                        "example": "John Doe"
+                      },
+                      "language": {
+                        "type": "string",
+                        "example": "English"
+                      },
+                      "level": {
+                        "type": "string",
+                        "example": "A2"
+                      },
+                      "startedAt": {
+                        "type": "string",
+                        "example": "2025-01-01 12:00:00"
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sala/session/{sessionId}/export-pdf": {
+      "get": {
+        "tags": [
+          "Sala"
+        ],
+        "description": "Exporta en PDF la conversación completa de la sesión.",
+        "produces": [
+          "application/pdf"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la sesión."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF generado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "PDF exportado correctamente"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}

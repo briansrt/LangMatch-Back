@@ -1,6 +1,10 @@
 import express, { urlencoded, json } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import swaggerUi from "swagger-ui-express";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const swaggerFile = require("./swagger-output.json");
 import userRoutes from './routes/userRoutes.routes.js';
 import salaRoutes from './routes/salaRoutes.routes.js';
 dotenv.config();
@@ -13,13 +17,9 @@ app.use(urlencoded({extended: true}))
 app.use(json())
 
 
-app.use(cors({
-  origin: 'https://d1yw6dixmekuzw.cloudfront.net',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
-}));
+app.use(cors());
 
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api/user', userRoutes);
 app.use('/api/sala', salaRoutes);
 
